@@ -1,6 +1,8 @@
 .env
 node_modules/
 dist/
+test-results/
+coverage/
 var/
 docs/
 docs/evidencias/

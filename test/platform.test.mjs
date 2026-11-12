@@ -166,3 +166,41 @@ test('arquivos fora da janela técnica não entram na contagem', async t => {
   const status = await f.request('/api/status');
   assert.deepEqual(await status.json(),{state:'available',events:26,errors:0});
 });
+
+test('valida preflight, formato do login e páginas sem uma visão válida', async t => {
+  const f = await fixture(t);
+  const preflight = await f.request('/api/session', {
+    method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'POST' }
+  });
+  assert.equal(preflight.status, 204);
+  assert.equal(preflight.headers.get('access-control-allow-origin'), origin);
+  assert.equal((await f.request('/api/session', { method: 'OPTIONS' })).status, 403);
+  assert.equal((await f.request('/api/session', {
+    method: 'POST', headers: { Origin: origin }, body: 'not-json'
+  })).status, 400);
+  const cookie = (await f.login()).headers.get('set-cookie').split(';')[0];
+  const get = path => f.request(path, { headers: { Cookie: cookie } });
+  assert.equal((await get('/api/logs?page=0')).status, 400);
+  assert.equal((await get('/api/logs?page=2')).status, 409);
+});
+
+test('rejeita campos inválidos sem descartar evento válido de rota desconhecida', async t => {
+  const f = await fixture(t);
+  const base = f.row(1);
+  const rows = [
+    null, { ...base, timestamp: 1 }, { ...base, timestamp: 'invalid' },
+    { ...base, timestamp: '2000-01-01T00:00:00.000Z' }, { ...base, method: 'UNKNOWN' },
+    { ...base, status: 200.5 }, { ...base, status: 99 }, { ...base, status: 600 },
+    { ...base, operation: 'unknown', requestId: 'invalid', durationMs: 0, status: 503 },
+  ];
+  await writeFile(f.file, rows.map(row => JSON.stringify(row)).join('\n') + '\n');
+  const status = await (await f.request('/api/status')).json();
+  assert.equal(status.events, 1);
+  assert.equal(status.errors, 1);
+  const cookie = (await f.login()).headers.get('set-cookie').split(';')[0];
+  const result = await (await f.request('/api/logs', { headers: { Cookie: cookie } })).json();
+  assert.equal(result.malformed, 8);
+  assert.equal(result.items[0].requestId, null);
+  assert.equal(result.items[0].log.operation, 'uncatalogued');
+  assert.equal(result.items[0].log.durationMs, 0);
+});
