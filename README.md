@@ -1,6 +1,6 @@
 # Plataforma de Monitoramento de APIs
 
-Aplicação local para acompanhar uma fonte JSONL, consultar eventos com autenticação e correlacionar requisições. Veja a [revisão de entrega e o plano de validação](docs/revisao-e-plano-de-validacao.md).
+Aplicação local para acompanhar uma fonte JSONL, consultar eventos com autenticação e correlacionar requisições..
 
 ## Início local
 
