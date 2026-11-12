@@ -2,15 +2,38 @@
   "name": "api-monitoring-platform",
   "private": true,
   "type": "module",
-  "engines": {"node": ">=24"},
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
-    "test": "node --test",
+    "test": "node --test test/*.test.mjs",
+    "test:e2e": "playwright test",
+    "test:coverage": "c8 --all --src server --include server/**/*.mjs --reports-dir coverage/server --reporter text-summary --reporter html --check-coverage --lines 80 --branches 80 node --test test/*.test.mjs",
+    "test:coverage:web": "vitest run --coverage --coverage.reportsDirectory=coverage/web",
     "build": "tsc --noEmit && vite build",
     "dev": "vite --host 127.0.0.1",
     "start": "node --env-file-if-exists=.env server/start.mjs",
     "hash-password": "node scripts/hash-password.mjs",
     "demo-api": "node --env-file-if-exists=.env scripts/demo-api.mjs"
   },
-  "dependencies": {"pg":"^8","react":"^19","react-dom":"^19"},
-  "devDependencies": {"@tailwindcss/vite":"^4","@types/react":"^19","@types/react-dom":"^19","tailwindcss":"^4","typescript":"^5.9","vite":"^7"}
+  "dependencies": {
+    "pg": "^8",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "@tailwindcss/vite": "^4",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "5.0.3",
+    "c8": "12.0.0",
+    "jsdom": "30.1.3",
+    "tailwindcss": "^4",
+    "typescript": "^5.9",
+    "vite": "^7",
+    "vitest": "5.0.3"
+  }
 }
