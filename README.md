@@ -44,6 +44,10 @@ O MVP usa um operador configurado por instalação e sessões em memória com 30
 
 Para hospedagem, selecione um host que tenha acesso local ou privado aos logs. Use proxy reverso HTTPS diante do backend ligado em loopback, conta dedicada, PostgreSQL privado e origens HTTPS exatas. Remova `MONITOR_LOCAL_HTTP=1` e configure a pasta absoluta. Use frontend e API sob o mesmo site para compatibilidade com cookies `SameSite=Strict`. Para GitHub Pages, a opção planejada é domínio personalizado sob o mesmo domínio registrável da API, ou um proxy de mesma origem diante do frontend e do backend. Defina `VITE_API_ORIGIN` no build quando usar origens distintas sob o mesmo site. Valide TLS, política de cookies e CORS no destino escolhido. Um domínio padrão `github.io` e uma API em domínio de outro site exigem outra topologia.
 
+## Abordagem de QA
+
+O risco central é expor detalhes de requisições ou correlacionar eventos incorretamente. A validação local usa dados sintéticos para exercitar o contrato JSONL, a busca por `requestId`, os limites de acesso a eventos e a auditoria em PostgreSQL. As verificações cobrem API e fluxos de interface. [Suítes e cobertura no PR #1](https://github.com/JoaquimcartaxoQA/api-monitoring-platform/pull/1)
+
 ## Verificações
 
 - `npm test` executa testes da API usando arquivos temporários. Para incluir PostgreSQL, aponte `MONITOR_TEST_DATABASE_URL` para um banco descartável dedicado, pois o teste insere e expurga dados.
