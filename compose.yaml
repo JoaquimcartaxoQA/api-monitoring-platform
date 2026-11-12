@@ -1,0 +1,18 @@
+services:
+  audit-db:
+    image: postgres:18.6
+    environment:
+      POSTGRES_DB: monitor
+      POSTGRES_USER: monitor
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina a senha do banco no arquivo .env}
+    ports:
+      - "127.0.0.1:55487:5432"
+    volumes:
+      - audit-db:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U monitor -d monitor"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+volumes:
+  audit-db:

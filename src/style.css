@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@layer base {
+  :root { font-family: "Inter", system-ui, sans-serif; color: #e3eef9; background: #0b1420; color-scheme: dark; }
+  h1 { font-size: clamp(1.55rem, 4vw, 2.15rem); font-weight: 750; letter-spacing: -.045em; }
+  h2 { font-size: 1.2rem; font-weight: 650; }
+  button, input { min-height: 42px; border: 1px solid #455971; border-radius: .5rem; padding: .45rem .75rem; background: #142234; }
+  button { cursor: pointer; }
+  button:hover:not(:disabled) { border-color: #64decd; }
+  button:disabled { opacity: .5; cursor: default; }
+  :focus-visible { outline: 2px solid #64decd; outline-offset: 3px; }
+  label { font-weight: 550; }
+  input { display: block; width: 100%; margin-top: .35rem; }
+  th, td { padding: .7rem .8rem; border-bottom: 1px solid #25364b; text-align: left; }
+  th { background: #17283d; color: #bdd1e7; }
+  td button { white-space: nowrap; }
+  table { width: 100%; }
+  dt { color: #a4bad1; font-size: .875rem; }
+}
+@layer components {
+  .panel,.metric,dialog { border: 1px solid #34475c; background: #101e2e; border-radius: .75rem; padding: 1rem; }
+  .metric { display: grid; gap: .35rem; }
+  .metric span,.section-head span,nav span { color: #a4bad1; }
+  .metric strong { font-size: 1.25rem; }
+  .section-head { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: baseline; gap: .5rem; margin-bottom: .65rem; }
+  .primary { color: #061914; background: #6fe2cc; border-color: #6fe2cc; font-weight: 700; }
+  .table-wrap { overflow-x: auto; margin-top: .85rem; border: 1px solid #34475c; border-radius: .75rem; }
+  .notice { margin-top: .75rem; color: #f6d797; }
+  .code { color: #a1f2d3; background: #1b403d; border-radius: .35rem; padding: .2rem .35rem; }
+  .code.bad { color: #ffd1cd; background: #532b30; }
+  .log-record { max-height: 16rem; overflow: auto; margin-top: .35rem; padding: .7rem; border-radius: .5rem; background: #0b1420; color: #d5e5f5; font-size: .78rem; white-space: pre-wrap; word-break: break-word; }
+  dialog { margin: auto; width: min(32rem, calc(100% - 2rem)); }
+  dialog::backdrop { background: #040911bf; }
+}
